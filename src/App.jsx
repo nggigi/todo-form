@@ -1,43 +1,60 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+
 
 function App() {
+  const [todos,setTodo] = useState("");
+  const [todoList, setTodoList] = useState([]);
 
 
-  const TodoApp = () => {
-    const [tasks, setTasks] = useState([]);
-    const [newTask, setNewTask] = useState('');
-  
-    const handleInputChange = (event) => {
-      setNewTask(event.target.value);
-    };
-  
-    const addTask = () => {
-        setTasks( newTask);
-      
-    };
-  
-    return (
-      <div>
-        <h1>Todo App</h1>
-        <input
-          type="text"
-          value={newTask}
-          onChange={handleInputChange}
-          placeholder="Add a new task"
+ const handleForm = (e) => {
+  e.preventDefault();
+  setTodoList([...todoList, {todoName: todos}]);
+  setTodo("");
+
+  };
+  const deleteTodo = (deleteValue) => {
+    const resTodoList = [...todoList.filter((val) => {
+      return val.todoName !== deleteValue;
+    }),
+  ];
+  setTodoList(resTodoList);
+  };
+
+  return (
+  <div>
+    <div className="w-[500px] mx-auto text-center bg-white p-5"> 
+      <h1 className="text-5xl font-bold md-8">Todo List</h1>
+
+      <form onSubmit={handleForm}>
+        <input className="border-2 placeholder:text-gray-500 rounded-lg border-black w-full p-5 mb-5 text-black" type="text" 
+        placeholder="Add Todo"
+        value={todos}
+        onChange={(e) => setTodo(e.target.value)}
         />
-        <button onClick={addTask}>Add Task</button>
+
+        <button type="submit" >Add Todo</button>
+      </form>
+
+      <div >
         <ul>
-          {tasks.map((task, index) => (
-            <li key={index}>{task}</li>
-          ))}
+          {todoList.map((todo, index) => {
+
+          return (
+            <li 
+              key={index}
+
+            >
+            {todo.todoName} {" "}
+
+             <span onClick={() => deleteTodo(todo.todoName) }>Clear</span>
+          </li>
+          );
+          })}
         </ul>
       </div>
-    );
-  };
-  
+    </div>
+    </div>
+  );
 }
 
 export default App
